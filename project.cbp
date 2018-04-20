@@ -7,7 +7,7 @@
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/__0" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/map-ed" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/" />
 				<Option type="1" />
@@ -19,7 +19,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Development">
-				<Option output="bin/__0" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/map-ed" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/" />
 				<Option type="1" />
@@ -30,7 +30,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/__0" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/map-ed" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/" />
 				<Option type="0" />
@@ -44,7 +44,7 @@
 				</Linker>
 			</Target>
 			<Target title="Debug OpenGL">
-				<Option output="bin/__0" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/map-ed" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/" />
 				<Option type="1" />
@@ -56,7 +56,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release with console">
-				<Option output="bin/__0" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/map-ed" prefix_auto="1" extension_auto="1" />
 				<Option working_dir="bin/" />
 				<Option object_output="obj/" />
 				<Option type="1" />
