@@ -13,7 +13,7 @@ constexpr int tile_size = 12;
 
 Events::AutoErrorHandlers error_handlers;
 
-Window win("Meow", screen_sz * 2, Window::Settings{}.MinSize(screen_sz).Resizable());
+Window win("Map Editor", screen_sz * 2, Window::Settings{}.MinSize(screen_sz).Resizable());
 Timing::TickStabilizer tick_stabilizer(60);
 
 Graphics::Texture texture_main(Graphics::Texture::nearest),
@@ -333,7 +333,6 @@ namespace Objects
                     (ivec2)(texture),
                     (ivec2)(size)(=ivec2(1)),
                     (ivec2)(offset)(=ivec2(0)),
-                    (ivec2)(tex_offset)(=ivec2(0)),
                 )
 
                 int global_index;
@@ -356,7 +355,7 @@ namespace Objects
                         throw std::runtime_error(Str("Texture coordinates for variant `", name, "` of tile `", tile_name, "` are out of range."));
 
                     small = (size == ivec2(1));
-                    effective_texture_pixel_pos    = sheet_tex_pos + (texture + offset + tex_offset) * tile_size;
+                    effective_texture_pixel_pos    = sheet_tex_pos + (texture + offset) * tile_size;
                     effective_texture_pixel_size   = size * tile_size;
                     effective_texture_pixel_offset = offset * tile_size;
                 }
@@ -2195,14 +2194,14 @@ namespace Scenes
 {
     using namespace Objects;
 
-    const Scene game = []
+    Scene Editor(std::string fname)
     {
         bool map_editor = 1;
 
         Scene s;
         s.Add<Camera>(ivec2(0));
         s.Add<Background>();
-        s.Add<Map>("test.map");
+        s.Add<Map>(fname);
         if (map_editor) s.Add<MapEditor>();
         s.Add<MapRenderer>();
 
@@ -2229,14 +2228,16 @@ namespace Scenes
             s.Get<TestObject>().Render(s);
         });
         return s;
-    }();
+    }
 }
 
-Scene current_scene = Scenes::game;
+Scene current_scene;
 
-int main(int, char **)
+int main(int argc, char **argv)
 {
     Draw::Init();
+
+    current_scene = Scenes::Editor(argc == 2 ? argv[1] : "untitled.map");
 
     auto Tick = [&]
     {
