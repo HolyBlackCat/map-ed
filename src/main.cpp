@@ -9,7 +9,7 @@
 #include <unordered_map>
 
 constexpr ivec2 screen_sz = ivec2(1920,1080)/3;
-constexpr int tile_size = 12;
+constexpr int tile_size = 16;
 
 Events::AutoErrorHandlers error_handlers;
 
@@ -574,23 +574,28 @@ namespace Objects
                         }
 
                         // Make duplicates (we do it before finalizing, because finalizing applies requirement matrices and checks result vectors)
-                        for (auto rule_it = rules.begin(); rule_it != rules.end();)
                         {
-                            auto &original_rule = *rule_it++; // Sic! We want to increment it now to insert at the right place later.
+                            std::vector<TileRule> new_rules;
 
-                            for (const auto &dupe : original_rule.duplicate)
+                            for (const auto &rule : rules)
                             {
-                                rule_it = rules.insert(rule_it, original_rule);
+                                new_rules.push_back(rule);
+                                for (const auto &dupe : rule.duplicate)
+                                {
+                                    TileRule new_rule = rule;
 
-                                for (auto mem_ptr : {&TileRule::requires, &TileRule::requires_not})
-                                for (auto &req : (*rule_it).*mem_ptr)
-                                    req.offset = dupe.matrix /mul/ req.offset;
+                                    for (auto mem_ptr : {&TileRule::requires, &TileRule::requires_not})
+                                    for (auto &req : new_rule.*mem_ptr)
+                                        req.offset = dupe.matrix /mul/ req.offset;
 
-                                if (dupe.results.size() > 0)
-                                    rule_it->results = dupe.results;
+                                    if (dupe.results.size() > 0)
+                                        new_rule.results = dupe.results;
 
-                                rule_it++;
+                                    new_rules.push_back(new_rule);
+                                }
                             }
+
+                            rules = std::move(new_rules);
                         }
 
                         // Finalize
@@ -731,7 +736,7 @@ namespace Objects
                             for (const auto &flag : it.flags)
                             {
                                 int flag_index = TileFlagIndex(flag);
-                                if (flag_index == 1)
+                                if (flag_index == -1)
                                     throw std::runtime_error(Str("An invalid flag named `", flag, "` was specified for tile `", it.name, "`."));
                                 it.flag_array[flag_index] = 1;
                             }
@@ -2119,7 +2124,7 @@ namespace Objects
                 if (resize_started)
                 {
                     r.Quad(ivec2(0), ivec2(screen_sz.x, 60)).color(fvec3(0)).center();
-                    std::string msg = "Extent \1";
+                    std::string msg = "Extend \1";
                          if (resize_type == ivec2(-1,0)) msg += "left";
                     else if (resize_type == ivec2( 1,0)) msg += "right";
                     else if (resize_type == ivec2(0,-1)) msg += "top";
