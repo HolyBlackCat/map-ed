@@ -165,7 +165,7 @@ namespace Draw
 
     void ReloadTextures()
     {
-        Graphics::Image textureimage_main("assets/texture.png");
+        Graphics::Image textureimage_main("texture.png");
         Graphics::Font::MakeAtlas(textureimage_main, ivec2(0,256), ivec2(256,256),
         {
             {font_object_main, font_main, Graphics::Font::light, Strings::Encodings::cp1251()},
@@ -189,8 +189,8 @@ namespace Draw
         Graphics::Blending::Enable();
         Graphics::Blending::FuncNormalPre();
 
-        font_object_main.Create("assets/CatIV15.ttf", 15);
-        font_object_tiny.Create("assets/CatTiny11.ttf", 11);
+        font_object_main.Create("CatIV15.ttf", 15);
+        font_object_tiny.Create("CatTiny11.ttf", 11);
 
         ReloadTextures();
 
@@ -983,7 +983,7 @@ namespace Objects
                 return data.autotiling_range;
             }
         };
-        inline static Tiling tiling{"assets/tiling"};
+        inline static Tiling tiling{"tiling"};
         inline static int flag_solid = tiling.FlagIndex("solid");
 
       private:
